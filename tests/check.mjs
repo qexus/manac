@@ -44,3 +44,21 @@ for(const lang of ["fr","uk"]){
 }
 assert(fs.readFileSync("filter.js","utf8").includes('lang==="fr"'),"Job filter count needs French translation");
 console.log("Indexable FR/UK Manac jobs, links, images and salary cards validated.");
+
+// Personal recommendation is explicitly free in RU, FR and UK editions.
+const feeTexts={
+ "index.html":"Помощь с возможной рекомендацией бесплатна",
+ "fr/index.html":"mon aide pour une éventuelle recommandation est entièrement gratuite",
+ "uk/index.html":"допомога з можливою рекомендацією повністю безплатна"
+};
+for(const [file,text] of Object.entries(feeTexts)){
+ const page=fs.readFileSync(file,"utf8");
+ const email=page.indexOf('class="email personal"');
+ const fee=page.indexOf('class="referral-fee-note"');
+ assert(email>=0&&fee>email&&fee-email<900,"No-fee reassurance must sit immediately after personal address: "+file);
+ assert(page.includes(text),"No-fee note missing/incorrect in "+file);
+ const emailBlock=page.match(/<a class="email personal" href="([^"]+)"/);
+ assert(emailBlock&&emailBlock[1].includes("mailto:reserout@gmail.com")&&emailBlock[1].includes("%0A"),"Localized CV contact link missing "+file);
+ assert(page.includes("info@manac.com"),"Official company contact must remain separate");
+}
+console.log("Free employee referral assistance stated alongside the email in RU/FR/UK.");

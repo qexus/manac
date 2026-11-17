@@ -34,3 +34,7 @@
 .top .brand{width:52px;min-width:52px;min-height:52px;justify-content:center}
 .top .brand img{width:44px;height:44px}
 @media(max-width:440px){.top{flex-wrap:wrap;justify-content:space-between;gap:6px;padding:12px 0}.top .back{order:3;flex-basis:100%;text-align:center}.top .qx-language-switch{margin-left:auto}}
+
+/* Clear no-fee reassurance next to the employee's personal email only. */
+.referral-fee-note{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;margin:12px 0;border:1px solid #347b6b;border-radius:12px;background:rgba(31,116,95,.14);color:#cff6e8;font-size:13px;font-weight:650;line-height:1.55}
+.referral-fee-note span{color:#69e9ba;font-weight:900;flex:none}
