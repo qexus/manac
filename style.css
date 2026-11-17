@@ -29,3 +29,8 @@
 .job-pay-amount{max-width:100%;font-size:clamp(21px,2.3vw,27px)}
 .email{min-width:0;overflow-wrap:anywhere}
 @media(max-width:360px){.hero h1{font-size:46px}.job-pay-amount{font-size:21px}.wrap{width:calc(100% - 28px)}}
+
+/* Minimal QX-only header and compact language selection */
+.top .brand{width:52px;min-width:52px;min-height:52px;justify-content:center}
+.top .brand img{width:44px;height:44px}
+@media(max-width:440px){.top{flex-wrap:wrap;justify-content:space-between;gap:6px;padding:12px 0}.top .back{order:3;flex-basis:100%;text-align:center}.top .qx-language-switch{margin-left:auto}}
