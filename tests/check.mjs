@@ -28,3 +28,19 @@ assert(html.includes('rel="icon"')&&html.includes('assets/qx-favicon-48.png'),"L
 assert(html.includes('https://fonts.googleapis.com/css2?'),"Google Fonts should load without CSS import");
 assert(!css.includes("@import url"),"Avoid chained render-blocking CSS font request");
 assert(html.includes('width="700" height="420" loading="lazy"'),"Vacancy thumbnails need responsive dimensions");
+
+// Indexable FR/UK editions remain complete and independent of JavaScript translation.
+for(const lang of ["fr","uk"]){
+ const local=fs.readFileSync(lang+"/index.html","utf8");
+ assert(local.includes('<html lang="'+lang+'">'),"Localized Manac HTML lang "+lang);
+ assert(local.includes('<link rel="canonical" href="https://qexus.github.io/manac/'+lang+'/">'),"Localized self canonical "+lang);
+ assert(local.includes('hreflang="ru"')&&local.includes('hreflang="fr"')&&local.includes('hreflang="uk"'),"Missing alternate links");
+ const cards=[...local.matchAll(/<article class="job"[\s\S]*?<\/article>/g)];
+ assert.equal(cards.length,11,"Localized Manac needs all 11 jobs");
+ assert.equal(cards.filter(c=>c[0].includes('class="job-pay-amount"')).length,9,"Nine official pay rates must be preserved");
+ assert(local.includes("reserout@gmail.com")&&local.includes("info@manac.com"),"Both contacts preserved");
+ assert(local.includes('href="../style.css"')&&local.includes('src="../filter.js"'),"Assets must work under language subdir");
+ assert(local.includes('href="https://qexus.github.io/'+lang+'/work.html"'),"Return to translated career hub");
+}
+assert(fs.readFileSync("filter.js","utf8").includes('lang==="fr"'),"Job filter count needs French translation");
+console.log("Indexable FR/UK Manac jobs, links, images and salary cards validated.");
