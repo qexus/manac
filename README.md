@@ -22,11 +22,11 @@
 
 ## Развёртывание на GitHub Pages
 
-Предполагаемый репозиторий: `qexus/manac`. Выставить **Settings → Pages → Source → GitHub Actions**. Публичный URL: `https://qexus.github.io/manac/`.
+Исходный репозиторий: `qexus/manac`. GitHub Pages опубликован через **GitHub Actions** по адресу `https://qexus.github.io/manac/`.
 
 Проект не требует NPM, сборки или доступа к API. Корень проекта должен содержать `index.html`, `style.css`, `filter.js`, `assets/` и `tests/`. Запустить проверки локально: `node tests/check.mjs`.
 
-Существующий `qexus.github.io/manac/` обслуживается пока пользовательским репозиторием `qexus.github.io`. **Не удалять исходные файлы до подтверждения работы нового GitHub Pages**: если URL пересекается, переключение источника нужно проверить отдельно.
+**Миграция завершена 17 ноября 2026:** по адресу `/manac/` опубликован проектный репозиторий `qexus/manac`, что подтверждено метатегом `site-repository`. Старая папка `manac/` удалена из репозитория `qexus/qexus.github.io`, а карточка проекта и Sitemap остаются на главном сайте.
 
 ## Обновление зарплат и вакансий
 
