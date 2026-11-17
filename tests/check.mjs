@@ -19,3 +19,12 @@ assert(!html.includes("../assets/"),"Standalone project cannot depend on root br
 assert(!css.includes(".job-pay-amount{margin-top:5px;color:#b7ffe6;font:700 clamp(23px,2.7vw,29px)/1.2 'Space Grotesk',sans-serif;letter-spacing:-.7px;white-space:nowrap}"),"No horizontal salary overflow");
 assert(js.includes("aria-pressed")&&js.includes("jobSearch"),"Interactive filters must remain intact");
 console.log("Passed: independent Manac assets, photos, salaries, official links, accessibility and basic SEO.");
+
+// Post-migration audit: classify IT technician within the Office & IT filter.
+const itCard=jobs.find(job=>job.includes('<h3>Technicien(ne) informatique</h3>'));
+assert(itCard && itCard.includes('data-category="office"'),"IT technician must appear under Office & IT");
+assert(html.includes('meta name="site-repository" content="qexus/manac"'),"Standalone repository marker must be present");
+assert(html.includes('rel="icon"')&&html.includes('assets/qx-favicon-48.png'),"Local favicon must be referenced");
+assert(html.includes('https://fonts.googleapis.com/css2?'),"Google Fonts should load without CSS import");
+assert(!css.includes("@import url"),"Avoid chained render-blocking CSS font request");
+assert(html.includes('width="700" height="420" loading="lazy"'),"Vacancy thumbnails need responsive dimensions");
