@@ -22,7 +22,7 @@
 
 ## Развёртывание на GitHub Pages
 
-Предполагаемый репозиторий: `qexus/manac`. Выставить **Settings → Pages → Deploy from a branch → main / (root)**. Публичный URL: `https://qexus.github.io/manac/`.
+Предполагаемый репозиторий: `qexus/manac`. Выставить **Settings → Pages → Source → GitHub Actions**. Публичный URL: `https://qexus.github.io/manac/`.
 
 Проект не требует NPM, сборки или доступа к API. Корень проекта должен содержать `index.html`, `style.css`, `filter.js`, `assets/` и `tests/`. Запустить проверки локально: `node tests/check.mjs`.
 

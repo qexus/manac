@@ -4,8 +4,8 @@
 
 ## Рекомендуемые шаги
 
-1. Создать **публичный** репозиторий `qexus/manac` и инициализировать его README.
-2. Скопировать `index.html`, `style.css`, `filter.js`, `assets/`, `tests/`, `README.md`, `.github/`, `.nojekyll` в корень нового репозитория.
+1. Репозиторий `qexus/manac` создан. Проверить, что его содержимое находится в корне ветки `main`.
+2. Файлы уже скопированы в корень нового репозитория.
 3. Открыть Settings → Pages → Build and deployment → Source: **GitHub Actions**.
 4. Дождаться успешного workflow `Verify and publish Manac` с запущенной проверкой контента.
 5. Проверить `https://qexus.github.io/manac/` и исходный HTML на наличие версии из нового репозитория. Убедиться, что `/work.html` ведёт на новый сайт.
