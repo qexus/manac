@@ -62,3 +62,14 @@ for(const [file,text] of Object.entries(feeTexts)){
  assert(page.includes("info@manac.com"),"Official company contact must remain separate");
 }
 console.log("Free employee referral assistance stated alongside the email in RU/FR/UK.");
+
+// Shared footer keeps country/project identities while preserving every required link.
+for(const lang of ['','fr/','uk/']){
+ const page=fs.readFileSync(lang+'index.html','utf8');
+ assert(page.includes('https://qexus.github.io/shared/qx-footer.css'), 'Shared footer CSS missing in '+lang);
+ assert(page.includes('class="qx-footer"')&&page.includes('class="qx-footer__links"'), 'Shared footer structure missing in '+lang);
+ assert(page.includes('href="https://www.pexels.com/license/"'), 'Pexels attribution missing in '+lang);
+ assert(page.includes('href="https://www.manac.com/ca/fr/compagnie/carrieres"'), 'Manac official-site link missing in '+lang);
+ assert(page.includes('href="https://qexus.github.io/'+(lang?lang:'')+'privacy.html"'), 'Localized privacy link missing in '+lang);
+}
+console.log('Shared RU/FR/UK footer, official employer link, photo credits and privacy links validated.');
