@@ -24,7 +24,7 @@
 
 Исходный репозиторий: `qexus/manac`. GitHub Pages опубликован через **GitHub Actions** по адресу `https://qexus.github.io/manac/`.
 
-Проект не требует NPM, сборки или доступа к API. Корень проекта должен содержать `index.html`, `style.css`, `filter.js`, `assets/` и `tests/`. Запустить проверки локально: `node tests/check.mjs`.
+Проект не требует NPM-зависимостей или доступа к API. Перед публикацией `node scripts/build_public.mjs` формирует строго ограниченный каталог `dist/`; тесты, отчёты и рабочая документация на GitHub Pages не публикуются. Корень проекта должен содержать `index.html`, `style.css`, `filter.js`, `assets/` и `tests/`. Запустить проверки локально: `node tests/check.mjs`.
 
 **Миграция завершена 17 ноября 2026:** по адресу `/manac/` опубликован проектный репозиторий `qexus/manac`, что подтверждено метатегом `site-repository`. Старая папка `manac/` удалена из репозитория `qexus/qexus.github.io`, а карточка проекта и Sitemap остаются на главном сайте.
 
