@@ -1,0 +1,60 @@
+name: Playwright · live mobile and desktop QA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/visual-qa.yml'
+      - 'index.html'
+      - 'fr/**'
+      - 'uk/**'
+      - 'style.css'
+      - 'filter.js'
+      - 'i18n.css'
+      - 'i18n.js'
+permissions:
+  contents: read
+
+concurrency:
+  group: qexus-playwright-manac
+  cancel-in-progress: true
+
+jobs:
+  browser-qa:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Fetch central QEXUS browser QA suite
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: qexus/qexus.github.io
+          ref: main
+          path: qexus-qa
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Install pinned Playwright
+        working-directory: qexus-qa/qa
+        run: npm install --no-audit --no-fund --ignore-scripts
+      - name: Install Chromium and WebKit
+        working-directory: qexus-qa/qa
+        run: npx playwright install --with-deps chromium webkit
+      - name: Test live manac website, mobile layout and forms
+        working-directory: qexus-qa/qa
+        env:
+          CI: 'true'
+          QA_manac: manac
+        run: npx playwright test
+      - name: Preserve browser screenshots, report and failure traces
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: qexus-manac-browser-report
+          path: |
+            qexus-qa/qa/playwright-report/
+            qexus-qa/qa/test-results/
+          if-no-files-found: warn
+          retention-days: 14
