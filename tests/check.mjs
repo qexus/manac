@@ -73,3 +73,27 @@ for(const lang of ['','fr/','uk/']){
  assert(page.includes('href="https://qexus.github.io/'+(lang?lang:'')+'privacy.html"'), 'Localized privacy link missing in '+lang);
 }
 console.log('Shared RU/FR/UK footer, official employer link, photo credits and privacy links validated.');
+
+// Accessibility + privacy regression: the screen reader name must start with
+// the visible call-to-action text, and third-party image requests are anonymous.
+for (const [file, visible, aria] of [
+  ['index.html','Официальная вакансия','Официальная вакансия Manac:'],
+  ['fr/index.html','Offre officielle','Offre officielle Manac :'],
+  ['uk/index.html','Офіційна вакансія','Офіційна вакансія Manac:'],
+]) {
+  const page=fs.readFileSync(file,'utf8');
+  const csp=page.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/)?.[1] || '';
+  assert(csp.includes("script-src 'self'")&&csp.includes("connect-src 'self'"), 'Manac requires strict same-origin script/network CSP: '+file);
+  const anchors=[...page.matchAll(/<a\b[^>]*aria-label="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)]
+    .filter(m=>m[1].includes('Manac:')||m[1].includes('Manac :'));
+  assert.equal(anchors.length,11,'Expected eleven vacancy links with accessible labels: '+file);
+  for(const match of anchors) {
+    assert(match[1].startsWith(aria),'Accessible name must begin with visible vacancy action: '+file);
+    assert(match[2].includes(visible),'Every link must have its visible CTA: '+file);
+  }
+  const images=[...page.matchAll(/<img\s+src="https:\/\/images\.pexels\.com\/[^"]+"[^>]*>/g)];
+  assert.equal(images.length,13,'Missing one of the credited Pexels photos: '+file);
+  assert(images.every(m=>m[0].includes('crossorigin="anonymous"')),'Third-party images must not request user credentials: '+file);
+  assert(!page.includes('w=1700'),'Oversized hero image request is deprecated: '+file);
+}
+console.log('Verified accessible vacancy link names, same-origin CSP and anonymous third-party images in three languages.');
