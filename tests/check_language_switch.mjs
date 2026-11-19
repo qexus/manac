@@ -10,5 +10,5 @@ for (const language of ['fr','uk']) {
   assert.equal(option[0][1].trim(), 'UA', file + ': use UA label');
   assert.match(option[0][0], /\/uk\//, file + ': preserve uk URLs');
 }
-assert(fs.readFileSync('i18n.js','utf8').includes("uk:'UA'"), 'Manac dynamic switch must also use UA');
+assert(fs.readFileSync('index.html','utf8').includes('src="https://qexus.github.io/shared/site-i18n.js" defer'), 'Manac should reuse cached central language module');
 console.log('Manac FR/UK static switches and dynamic language label checked.');

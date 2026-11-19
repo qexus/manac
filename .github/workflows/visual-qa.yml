@@ -12,7 +12,6 @@ on:
       - 'style.css'
       - 'filter.js'
       - 'i18n.css'
-      - 'i18n.js'
       - 'tests/check_language_switch.mjs'
 permissions:
   contents: read
