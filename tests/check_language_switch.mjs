@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+for (const language of ['fr','uk']) {
+  const file = language + '/index.html';
+  const html = fs.readFileSync(file, 'utf8');
+  const nav = html.match(/<nav\b[^>]*class="[^"]*qx-language-switch[^"]*"[^>]*>[\s\S]*?<\/nav>/)?.[0];
+  assert(nav, file + ': missing visible language selector');
+  const option = [...nav.matchAll(/<a\b[^>]*hreflang="uk"[^>]*>([\s\S]*?)<\/a>/g)];
+  assert.equal(option.length, 1, file + ': exactly one Ukrainian option');
+  assert.equal(option[0][1].trim(), 'UA', file + ': use UA label');
+  assert.match(option[0][0], /\/uk\//, file + ': preserve uk URLs');
+}
+assert(fs.readFileSync('i18n.js','utf8').includes("uk:'UA'"), 'Manac dynamic switch must also use UA');
+console.log('Manac FR/UK static switches and dynamic language label checked.');
