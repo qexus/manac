@@ -46,7 +46,7 @@ jobs:
         working-directory: qexus-qa/qa
         env:
           CI: 'true'
-          QA_manac: manac
+          QA_SITE: manac
         run: npx playwright test
       - name: Preserve browser screenshots, report and failure traces
         if: ${{ !cancelled() }}
