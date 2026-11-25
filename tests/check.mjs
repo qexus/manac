@@ -11,7 +11,9 @@ assert.equal(jobs.filter(x=>x.includes("Зарплата не указана")).
 for(const job of jobs){assert(job.includes("https://www.manac.com/ca/fr/compagnie/carrieres/"),"Every vacancy needs an official source");assert(job.includes('class="job-photo"'),"Every vacancy needs a photo");}
 for(const tag of ['rel="canonical"','name="description"','lang="ru"','id="jobSearch"','id="jobStatus"'])assert(html.includes(tag),"Missing HTML requirement "+tag);
 for(const asset of ["assets/qx-logo-180.png","assets/qx-favicon-48.png","filter.js","style.css"])assert(fs.existsSync(asset),"Missing standalone resource "+asset);
-assert(html.includes("reserout@gmail.com")&&html.includes("info@manac.com"),"Contact emails missing");
+assert(html.includes('data-mail-user="reserout" data-mail-domain="gmail.com"')&&html.includes("info@manac.com"),"Contact emails missing");
+for(const f of ["index.html","fr/index.html","uk/index.html"])assert(!fs.readFileSync(f,"utf8").includes("reserout@gmail.com"),"Personal Gmail must not appear in plain HTML (spam harvesting): "+f);
+assert(fs.readFileSync("filter.js","utf8").includes("data-mail-user"),"filter.js must assemble the protected mailto link");
 assert(html.includes("не официальный сайт Manac")&&html.includes("Все фотографии взяты из Pexels"),"Disclosure required");
 assert(html.includes('href="https://qexus.github.io/work.html"'),"Back link to career hub missing");
 assert(!html.includes("media.manac.com"),"Original Manac-owned photos must not be used");
@@ -25,7 +27,7 @@ const itCard=jobs.find(job=>job.includes('<h3>Technicien(ne) informatique</h3>')
 assert(itCard && itCard.includes('data-category="office"'),"IT technician must appear under Office & IT");
 assert(html.includes('meta name="site-repository" content="qexus/manac"'),"Standalone repository marker must be present");
 assert(html.includes('rel="icon"')&&html.includes('assets/qx-favicon-48.png'),"Local favicon must be referenced");
-assert(html.includes('https://fonts.googleapis.com/css2?'),"Google Fonts should load without CSS import");
+assert(html.includes('https://qexus.github.io/assets/fonts/fonts.css')&&!html.includes('fonts.googleapis.com'),"Fonts must be self-hosted (no Google Fonts requests)");
 assert(!css.includes("@import url"),"Avoid chained render-blocking CSS font request");
 assert(html.includes('width="700" height="420" loading="lazy"'),"Vacancy thumbnails need responsive dimensions");
 
@@ -38,7 +40,7 @@ for(const lang of ["fr","uk"]){
  const cards=[...local.matchAll(/<article class="job"[\s\S]*?<\/article>/g)];
  assert.equal(cards.length,11,"Localized Manac needs all 11 jobs");
  assert.equal(cards.filter(c=>c[0].includes('class="job-pay-amount"')).length,9,"Nine official pay rates must be preserved");
- assert(local.includes("reserout@gmail.com")&&local.includes("info@manac.com"),"Both contacts preserved");
+ assert(local.includes('data-mail-user="reserout"')&&local.includes("info@manac.com"),"Both contacts preserved");
  assert(local.includes('href="../style.css"')&&local.includes('src="../filter.js"'),"Assets must work under language subdir");
  assert(local.includes('href="https://qexus.github.io/'+lang+'/work.html"'),"Return to translated career hub");
 }
@@ -53,12 +55,12 @@ const feeTexts={
 };
 for(const [file,text] of Object.entries(feeTexts)){
  const page=fs.readFileSync(file,"utf8");
- const email=page.indexOf('class="email personal"');
+ const email=page.indexOf("</a>",page.indexOf('class="email personal"'));
  const fee=page.indexOf('class="referral-fee-note"');
  assert(email>=0&&fee>email&&fee-email<900,"No-fee reassurance must sit immediately after personal address: "+file);
  assert(page.includes(text),"No-fee note missing/incorrect in "+file);
- const emailBlock=page.match(/<a class="email personal" href="([^"]+)"/);
- assert(emailBlock&&emailBlock[1].includes("mailto:reserout@gmail.com")&&emailBlock[1].includes("%0A"),"Localized CV contact link missing "+file);
+ const emailBlock=page.match(/<a class="email personal" href="mailto:" data-mail-user="reserout" data-mail-domain="gmail.com" data-mail-query="([^"]+)"/);
+ assert(emailBlock&&emailBlock[1].includes("%0A"),"Localized CV contact link missing "+file);
  assert(page.includes("info@manac.com"),"Official company contact must remain separate");
 }
 console.log("Free employee referral assistance stated alongside the email in RU/FR/UK.");

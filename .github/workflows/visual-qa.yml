@@ -44,7 +44,7 @@ jobs:
         run: node tests/check_language_switch.mjs
       - name: Install pinned Playwright
         working-directory: qexus-qa/qa
-        run: npm install --no-audit --no-fund --ignore-scripts
+        run: npm ci --no-audit --no-fund --ignore-scripts
       - name: Install Chromium and WebKit
         working-directory: qexus-qa/qa
         run: npx playwright install --with-deps chromium webkit

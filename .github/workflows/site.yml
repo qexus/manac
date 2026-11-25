@@ -23,7 +23,11 @@ jobs:
         with:
           node-version: '22'
       - name: Validate content, links, salary and images
-        run: node tests/check.mjs
+        run: |
+          node tests/check.mjs
+          node tests/check_seo_meta.mjs
+          node tests/check_footer.mjs
+          node tests/check_local_assets.mjs
       - name: Assert Pages file allowlist
         run: node scripts/build_public.mjs
 
