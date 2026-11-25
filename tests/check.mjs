@@ -27,7 +27,7 @@ const itCard=jobs.find(job=>job.includes('<h3>Technicien(ne) informatique</h3>')
 assert(itCard && itCard.includes('data-category="office"'),"IT technician must appear under Office & IT");
 assert(html.includes('meta name="site-repository" content="qexus/manac"'),"Standalone repository marker must be present");
 assert(html.includes('rel="icon"')&&html.includes('assets/qx-favicon-48.png'),"Local favicon must be referenced");
-assert(html.includes('https://fonts.googleapis.com/css2?'),"Google Fonts should load without CSS import");
+assert(html.includes('https://qexus.github.io/assets/fonts/fonts.css')&&!html.includes('fonts.googleapis.com'),"Fonts must be self-hosted (no Google Fonts requests)");
 assert(!css.includes("@import url"),"Avoid chained render-blocking CSS font request");
 assert(html.includes('width="700" height="420" loading="lazy"'),"Vacancy thumbnails need responsive dimensions");
 
